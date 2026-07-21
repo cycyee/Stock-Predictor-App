@@ -1,45 +1,36 @@
-# Stock Predictor App
+# Stock Predictor
 
-## Introduction:
+Time-series forecasting tool that combines Fourier decomposition with Facebook Prophet for stock price prediction and cycle analysis.
 
-Welcome to the Stock Predictor App! This application leverages time series forecasting techniques to predict stock prices based on historical data. Whether you're a trader, investor, or simply curious about stock trends, this app provides insightful forecasts and visualizations.
+## How it works
 
-## Features:
+**Fourier decomposition** — the closing price is detrended (linear fit removed), then an FFT identifies the dominant periodic cycles in the price history. You choose how many harmonics to keep; the app reconstructs the signal from those harmonics and extrapolates them forward as a forecast. A frequency spectrum plot shows which cycles (in trading days) carry the most energy.
 
-Time Series Forecasting: Predict future stock prices using Prophet, a forecasting tool by Facebook.
-Interactive Charts: Visualize historical and forecasted data with Plotly charts.
-User-Friendly Interface: Streamlit-powered app with intuitive controls for selecting stocks and forecasting periods.
+**Prophet forecast** — runs separately as a comparison. Prophet handles trend changepoints and yearly/weekly seasonality automatically.
 
-### Installation
-Clone the repository:
+**Backtest comparison** — both models are evaluated on the most recent ~1 year of data using MAE and RMSE so you can see which fits better for a given ticker.
 
-bash:
+## Features
 
+- Any ticker symbol (free text input, pulled from Yahoo Finance)
+- Adjustable forecast horizon (1–4 years)
+- Adjustable number of Fourier harmonics (1–50)
+- Frequency spectrum with dominant cycle table
+- Fourier reconstruction overlay on historical prices
+- Fourier extrapolation forecast
+- Prophet forecast with component breakdown
+- Side-by-side backtest metrics (MAE, RMSE)
+- Residuals view (optional)
+
+## Setup
+
+```bash
 git clone https://github.com/cycyee/Stock-Predictor-App.git
 cd Stock-Predictor-App
-
-### Install dependencies:
-
-bash:
-
 pip install -r requirements.txt
-Run the application:
+streamlit run main.py
+```
 
-bash:
+## Stack
 
-streamlit run app.py
-Open your browser and navigate to http://localhost:8501 to view the app.
-
-## Usage:
-
-Select a stock from the dropdown menu.
-Adjust the slider to choose the number of years for forecasting.
-Explore the raw data and forecasted results.
-Use the interactive charts to visualize trends and forecast components.
-
-## Technologies Used:
-
-Python: Programming language used for backend development.
-Streamlit: Framework for building and deploying web applications.
-Prophet: Time series forecasting tool by Facebook.
-Plotly: Library for interactive data visualization.
+Python, NumPy (FFT), Prophet, Streamlit, Plotly, yfinance
